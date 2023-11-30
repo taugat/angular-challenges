@@ -1,0 +1,15 @@
+<app-card
+    [list]="cities$ | async"
+    (add)="addNewCity()"
+    [src]="'assets/img/student.webp'"
+    customClass="bg-light-blue">
+
+    <ng-template #rowTemplate let-city>
+        <app-list-item
+            [name]="city.name"
+            (deleteItem)="deleteCity(city.id)"
+        >
+        </app-list-item>
+    </ng-template>
+
+</app-card>

@@ -1,0 +1,15 @@
+<app-card
+    [list]="teachers$ | async"
+    (add)="addNewTeacher()"
+    [src]="'assets/img/teacher.png'"
+    customClass="bg-light-red">
+
+    <ng-template #rowTemplate let-teacher>
+        <app-list-item
+            [name]="teacher.firstname"
+            (deleteItem)="deleteTeacher(teacher.id)"
+        >
+        </app-list-item>
+    </ng-template>
+
+</app-card>
