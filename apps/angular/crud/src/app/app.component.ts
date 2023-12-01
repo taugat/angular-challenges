@@ -13,6 +13,7 @@ import { BehaviorSubject } from 'rxjs';
     <div *ngFor="let todo of todos$ | async">
       {{ todo.title }}
       <button (click)="update(todo)">Update</button>
+      <button (click)="delete(todo)">Delete</button>
     </div>
   `,
   styles: [],
@@ -35,6 +36,13 @@ export class AppComponent implements OnInit {
       let index = todoTempList.findIndex((t) => t.id === todoUpdated.id);
       todoTempList[index] = todoUpdated;
 
+      this.todos.next(todoTempList);
+    });
+  }
+
+  delete(todo: Todo) {
+    this.todoService.delete(todo.id).subscribe(() => {
+      let todoTempList = this.todos.value.filter((t) => t.id !== todo.id);
       this.todos.next(todoTempList);
     });
   }

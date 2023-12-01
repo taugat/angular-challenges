@@ -32,4 +32,8 @@ export class TodoService {
       },
     );
   }
+
+  delete(todoId: number): Observable<Todo> {
+    return this.http.delete<Todo>(`${this.URL}/${todoId}`);
+  }
 }
