@@ -33,7 +33,7 @@ export class TodoService {
     );
   }
 
-  delete(todoId: number): Observable<Todo> {
-    return this.http.delete<Todo>(`${this.URL}/${todoId}`);
+  delete(todoId: number): Observable<void> {
+    return this.http.delete<void>(`${this.URL}/${todoId}`);
   }
 }
