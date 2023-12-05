@@ -31,7 +31,11 @@ export class UserRoleService {
       ? requieredRole
       : [requieredRole];
     return this.roles$.pipe(
-      map((roles) => requieredRoles.some((rr) => roles.includes(rr))),
+      map((roles) =>
+        requieredRoles.length === 0
+          ? true
+          : requieredRoles.some((rr) => roles.includes(rr)),
+      ),
     );
   }
 
@@ -44,7 +48,7 @@ export class UserRoleService {
 
   public matchAccess$(requieredAdmin: boolean) {
     return this.admin$.pipe(
-      map((admin) => (requieredAdmin && admin) || !requieredAdmin),
+      map((admin) => (requieredAdmin && admin) || (!requieredAdmin && !admin)),
     );
   }
 }
