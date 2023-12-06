@@ -2,6 +2,7 @@ import { AsyncPipe, NgFor, NgIf } from '@angular/common';
 import { Component, Input, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { FakeServiceService } from './fake.service';
+import { Observable, map } from 'rxjs';
 
 interface MenuItem {
   path: string;
@@ -11,9 +12,9 @@ interface MenuItem {
 @Component({
   selector: 'app-nav',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, NgFor],
+  imports: [RouterLink, RouterLinkActive, NgFor, AsyncPipe],
   template: `
-    <ng-container *ngFor="let menu of menus">
+    <ng-container *ngFor="let menu of menus$ | async">
       <a
         class="border px-4 py-2 rounded-md"
         [routerLink]="menu.path"
@@ -34,7 +35,7 @@ interface MenuItem {
   },
 })
 export class NavigationComponent {
-  @Input() menus!: MenuItem[];
+  @Input() menus$!: Observable<MenuItem[]>;
 }
 
 @Component({
@@ -42,14 +43,8 @@ export class NavigationComponent {
   imports: [NavigationComponent, NgIf, AsyncPipe],
   template: `
     <ng-container *ngIf="info$ | async as info">
-      <ng-container *ngIf="info !== null; else noInfo">
-        <app-nav [menus]="getMenu(info)" />
-      </ng-container>
+      <app-nav [menus$]="menu$" />
     </ng-container>
-
-    <ng-template #noInfo>
-      <app-nav [menus]="getMenu('')" />
-    </ng-template>
   `,
   host: {},
 })
@@ -58,7 +53,11 @@ export class MainNavigationComponent {
 
   readonly info$ = this.fakeBackend.getInfoFromBackend();
 
-  getMenu(prop: string) {
+  menu$ = this.fakeBackend
+    .getInfoFromBackend()
+    .pipe(map((info) => this.getMenu(info ?? '')));
+
+  getMenu(prop: string): MenuItem[] {
     return [
       { path: '/foo', name: `Foo ${prop}` },
       { path: '/bar', name: `Bar ${prop}` },
