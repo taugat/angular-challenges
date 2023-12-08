@@ -1,5 +1,6 @@
 import { NgTemplateOutlet } from '@angular/common';
 import { Component, ContentChild, Input, TemplateRef } from '@angular/core';
+import { PersonTypedTemplateDirective } from './person-typed-template.directive';
 
 interface Person {
   name: string;
@@ -23,6 +24,11 @@ interface Person {
 export class PersonComponent {
   @Input() person!: Person;
 
-  @ContentChild('#personRef', { read: TemplateRef })
+  @ContentChild(PersonTypedTemplateDirective, { read: TemplateRef })
   personTemplateRef!: TemplateRef<unknown>;
 }
+
+export type PersonContext = {
+  $implicit: string;
+  age: number;
+};

@@ -5,7 +5,9 @@ import {
   ContentChild,
   Input,
   TemplateRef,
+  ViewChild,
 } from '@angular/core';
+import { ListTypedTemplateDirective } from './list-typed-template.directive';
 
 @Component({
   selector: 'list',
@@ -28,6 +30,12 @@ import {
 export class ListComponent<TItem extends object> {
   @Input() list!: TItem[];
 
-  @ContentChild('listRef', { read: TemplateRef })
+  @ContentChild(ListTypedTemplateDirective, { read: TemplateRef })
   listTemplateRef!: TemplateRef<unknown>;
 }
+
+export type ListContext<T> = {
+  $implicit: T;
+  appList: T;
+  index: number;
+};
