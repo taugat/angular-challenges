@@ -1,6 +1,5 @@
 import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
-import { PersonUtils } from './person.utils';
 import { PersonUtilsPipe } from './temp.pipe';
 
 @Component({
@@ -12,9 +11,9 @@ import { PersonUtilsPipe } from './temp.pipe';
       {{ activity.name }} :
       <div
         *ngFor="let person of persons; let index = index; let isFirst = first">
-        {{ showName | personUtils: person.name : index }}
+        {{ 'showName' | personUtils: person.name : index }}
         {{
-          isAllowed | personUtils: person.age : isFirst : activity.minimumAge
+          'isAllowed' | personUtils: person.age : isFirst : activity.minimumAge
         }}
       </div>
     </div>
@@ -32,8 +31,4 @@ export class AppComponent {
     { name: 'hiking', minimumAge: 25 },
     { name: 'dancing', minimumAge: 1 },
   ];
-
-  showName = PersonUtils.showName;
-
-  isAllowed = PersonUtils.isAllowed;
 }

@@ -1,4 +1,4 @@
-export class PersonUtilsDefinition {
+class PersonUtilsDefinition {
   showName(name: string, index: number) {
     // very heavy computation
     return `${name} - ${index}`;
@@ -12,21 +12,25 @@ export class PersonUtilsDefinition {
     }
   }
 }
-export type PersonUtilsFunction = {
+
+type FunctionPropertyNames<T> = {
+  [K in keyof T]: T[K] extends Function ? K : never;
+}[keyof T];
+
+export type PersonUtilsFunctionName = {
   [K in keyof PersonUtilsDefinition]: PersonUtilsDefinition[K] extends (
     ...args: any[]
   ) => any
-    ? PersonUtilsDefinition[K]
+    ? K
     : never;
 }[keyof PersonUtilsDefinition];
 
-export type PersonUtilsArgs<PersonUtilsFunction> = PersonUtilsFunction extends (
-  ...args: infer T extends any[]
-) => any
-  ? T
-  : never;
+export type PersonUtilsArgs<F extends keyof PersonUtilsDefinition> =
+  PersonUtilsDefinition[F] extends (...args: infer T extends any[]) => any
+    ? T
+    : never;
 
-export type PersonUtilsReturn<PersonUtilsFunction> =
-  PersonUtilsFunction extends (...args: any) => infer T ? T : never;
+export type PersonUtilsReturn<F extends keyof PersonUtilsDefinition> =
+  PersonUtilsDefinition[F] extends (...args: any) => infer T ? T : never;
 
 export const PersonUtils = new PersonUtilsDefinition();

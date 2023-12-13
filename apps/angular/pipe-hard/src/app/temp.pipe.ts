@@ -1,7 +1,8 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import {
+  PersonUtils,
   PersonUtilsArgs,
-  PersonUtilsFunction,
+  PersonUtilsFunctionName,
   PersonUtilsReturn,
 } from './person.utils';
 
@@ -10,10 +11,10 @@ import {
   name: 'personUtils',
 })
 export class PersonUtilsPipe implements PipeTransform {
-  transform<T extends PersonUtilsFunction>(
+  transform<T extends PersonUtilsFunctionName>(
     fun: T,
     ...args: PersonUtilsArgs<T>
   ): PersonUtilsReturn<T> {
-    return (fun as (...args: any[]) => any)(...args);
+    return (<Function>PersonUtils[fun])(...args);
   }
 }
